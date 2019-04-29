@@ -1,0 +1,140 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+unsigned i;
+char password[27] = {"ZYXWVUTSRQOINMLKJIHGFEDCBA"};
+
+int Password_init()
+{
+
+	int k;
+	memset(password, 0, sizeof(26));
+	scanf("%s", password);
+	for (k = 0; k < (strlen(password) - 1); k++) 
+	{
+		for (i = k+1; i < strlen(password) ; i++) 
+		{
+			if (password[k] == password[i ])
+			{
+				printf("character repeat! \n");
+				fflush(stdin);
+				return 0;
+			}
+		}
+	}
+
+	return 1;
+}
+void asina()
+{
+	FILE *fp = fopen("test.txt", "w");
+	char str[256] = "";
+	
+	int index=0;
+	
+	printf("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
+	printf("input Substitution Cipher:\n");
+	if (!Password_init()) 
+	{
+
+		return;
+	}
+	getchar();
+	
+	
+	for (i = 0; i < 26; i++) 
+	{
+
+		if (password[i] >= 'a'&&password[i] <= 'z') 
+		{
+
+			password[i] -= 32;
+		}
+	}
+	
+	printf("type in :\n");
+	gets(str);
+	for (i = 0; i<strlen(str); i++)
+	{
+		if (str[i] >= 'A'&&str[i] <= 'Z')
+		{
+			index = str[i] - 'A';
+			str[i] = password[index];
+			continue;
+		}
+		if (str[i] >= 'a'&&str[i] <= 'z')
+		{
+			str[i] -= 32;
+			index = str[i] - 'A';
+			str[i] = password[index];
+			continue;
+		}
+	}
+	printf("Jiami hou:\n");
+	puts(str);
+	if (fputs(str, fp) != EOF)printf("write in sucess\n");
+	fclose(fp);
+}
+void asina1()
+{
+	FILE *fp, *fp1;
+	int k;
+	char str[256] = "";
+	fp = fopen("test.txt", "r");
+	if (fp == NULL)exit(1);
+	fp1 = fopen("new.txt", "w");
+	
+	while (fgets(str, 256, fp) != NULL)
+	{
+		for (i = 0; i<strlen(str); i++)
+		{
+			if (str[i] >= 'A'&&str[i] <= 'Z')
+			{
+				for (k = 0; k < 26; k++) 
+				{
+
+					if (str[i] == password[k]) 
+					{
+
+						str[i] = (char)('A' + k);
+						break;
+					}
+
+				}
+			}
+		
+		
+		}
+		printf("Jiemi hou:\n");
+		puts(str);
+		if (fputs(str, fp1) != EOF)printf("write in sucess\n");
+	}
+	fcloseall();
+}
+
+void menu()
+{
+
+	char c;
+	printf("\n Mission2 Substitution\n");
+	printf("1.Jiami\n2.Jiemi\n3.exit");
+	printf("\n");
+	printf("slect:");
+	scanf(" %c", &c);
+	getchar();
+	switch (c)
+	{
+	case '1':asina(); 
+	break;
+	case '2':asina1(); 
+	break;
+	case '3':exit(0); 
+	break;
+	}
+}
+
+int main()
+{
+	while (1)menu();
+	return 0;
+}
